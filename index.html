@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>𝐈𝐕𝐀𝐍𝐈𝐂𝐇 𝐓𝐎𝐏 𝐌𝐀𝐑𝐊𝐄𝐓</title>
+<title>IVANICH SHOP</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -13,35 +13,53 @@ html,body{
   user-select:none;
 }
 
-/* ===== ФОН ===== */
+/* ===== ФОН (ЦЕЛИКОМ) ===== */
 body{
   background:#050006 url("skull-bg.png") center center / contain no-repeat fixed;
 }
 body::before{
-  content:"";position:fixed;inset:0;
-  background:rgba(5,0,6,0.65);z-index:-1;
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(5,0,6,0.65);
+  z-index:-1;
 }
 
 /* ===== КОНТЕНТ ===== */
 #content{
-  max-width:720px;margin:auto;padding:40px 16px;
-  min-height:100vh;display:flex;flex-direction:column;
-  justify-content:center;gap:26px;text-align:center;
+  max-width:720px;
+  margin:auto;
+  padding:40px 16px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:26px;
+  text-align:center;
 }
 
 /* ===== ЧЁРНЫЙ ТЕКСТ + НЕОНОВАЯ ОБВОДКА ===== */
 h1,.futuristic-text{
   color:#000;
-  text-shadow:0 0 3px #ffd86b,0 0 10px #ffb700,0 0 22px #cc8f00;
+  text-shadow:
+    0 0 3px #ffd86b,
+    0 0 10px #ffb700,
+    0 0 22px #cc8f00;
 }
 h1{font-size:1.9rem}
 .futuristic-text{font-size:1rem;line-height:1.5;white-space:pre-line}
 
 /* ===== КРАСНЫЙ НЕОН ===== */
 .telegram-warning{
-  font-size:1.35rem;font-weight:900;letter-spacing:1px;
-  text-transform:uppercase;color:#000;
-  text-shadow:0 0 4px #ff4b4b,0 0 10px #ff0000,0 0 26px #b00000;
+  font-size:1.35rem;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:#000;
+  text-shadow:
+    0 0 4px #ff4b4b,
+    0 0 10px #ff0000,
+    0 0 26px #b00000;
 }
 
 /* ===== КНОПКИ ===== */
@@ -50,8 +68,10 @@ button{
   background:rgba(0,0,0,0.6);
   border:2px solid #ffcc55;
   color:#000;
-  padding:12px 30px;border-radius:6px;
-  cursor:pointer;font-weight:800;
+  padding:12px 30px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:800;
   text-shadow:0 0 3px #ffd86b,0 0 10px #ffb700;
   box-shadow:0 0 6px #ffcc55,0 0 18px #cc8f00;
   transition:.25s;
@@ -66,7 +86,7 @@ button:hover{
 <body>
 
 <div id="content">
-  <h1>𝐈𝐕𝐀𝐍𝐈𝐂𝐇 𝐓𝐎𝐏 𝐌𝐀𝐑𝐊𝐄𝐓</h1>
+  <h1>IVANICH SHOP</h1>
 
   <p class="futuristic-text">
 НАШ КЛИЕНТ — НЕ БОГ, НО ОЧЕНЬ БЛИЗКО  
@@ -82,7 +102,7 @@ button:hover{
 </div>
 
 <script>
-// ===== ССЫЛКИ (ТОЛЬКО TG://) =====
+// ===== TG-ССЫЛКИ (ТОЛЬКО tg://) =====
 const LINKS = {
   "ОПЕРАТОР": "tg://open?url=https://t.me/m/WaE8Y4yVZmI8",
   "ЧАТ":     "tg://join?invite=q5G7ZOOG1vI0NmQ0",
@@ -92,7 +112,7 @@ const LINKS = {
   "АУКЦИОН": "tg://join?invite=P2N70uFsT99mMzYx"
 };
 
-// ===== BLOB → ТОЛЬКО TG (БЕЗ WEB FALLBACK) =====
+// ===== BLOB → ТОЛЬКО TELEGRAM (БЕЗ БРАУЗЕРА) =====
 function openViaBlob(tgLink){
   const html = `
 <!DOCTYPE html>
@@ -106,19 +126,21 @@ function openViaBlob(tgLink){
 display:flex;align-items:center;justify-content:center;height:100vh;
 font-family:monospace;flex-direction:column">
 
-<p>Открытие через Telegram…</p>
+<p>Открываем Telegram…</p>
 
 <script>
 (function(){
-  // 🔒 ОДИН РАЗ
-  if(sessionStorage.getItem("tg_only_done")){
-    document.body.insertAdjacentHTML("beforeend",
-      "<p>Повторный переход запрещён</p>");
+  // 🔒 Запрет повторного перехода
+  if(sessionStorage.getItem("tg_opened")){
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      "<p>Повторный переход заблокирован</p>"
+    );
     return;
   }
-  sessionStorage.setItem("tg_only_done","1");
+  sessionStorage.setItem("tg_opened","1");
 
-  // ❌ БРАУЗЕР ЗАПРЕЩЁН — ТОЛЬКО TG
+  // ✅ ТОЛЬКО tg://
   var iframe=document.createElement("iframe");
   iframe.style.display="none";
   iframe.src="${tgLink}";
@@ -141,7 +163,7 @@ Object.entries(LINKS).forEach(([title,tg])=>{
   container.appendChild(b);
 });
 
-// ===== ЖЁСТКАЯ ЗАЩИТА =====
+// ===== ЗАЩИТА =====
 document.addEventListener("keydown",e=>{
   if(
     e.key==="F12" ||
