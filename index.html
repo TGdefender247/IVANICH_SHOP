@@ -3,71 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IVANICH TOP MARKET</title>
+<title>IVANICH SHOP</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{
-height:100%;
-background:#050006;
-color:#f0e6ff;
-font-family:'Share Tech Mono',monospace;
-font-size:13px;
-overflow-x:hidden
+  height:100%;
+  background:#050006;
+  color:#f0e6ff;
+  font-family:'Share Tech Mono', monospace;
+  font-size:13px;
+  overflow-x:hidden;
+  user-select:none;
 }
 canvas.matrix{
-position:fixed;
-top:0;left:0;
-width:100vw;height:100vh;
-z-index:0;
-background:#050006
+  position:fixed;
+  inset:0;
+  z-index:0;
+  background:#050006;
 }
 #content{
-position:relative;
-z-index:10;
-max-width:700px;
-margin:auto;
-padding:40px 15px;
-text-align:center;
-display:flex;
-flex-direction:column;
-gap:24px;
-min-height:100vh;
-justify-content:center
+  position:relative;
+  z-index:10;
+  max-width:720px;
+  margin:auto;
+  padding:40px 16px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:24px;
+  text-align:center;
 }
 h1{
-font-size:1.8rem;
-color:#e0d0ff;
-text-shadow:0 0 4px #a26cff,0 0 18px #6000c0
+  font-size:1.8rem;
+  color:#e0d0ff;
+  text-shadow:0 0 4px #a26cff,0 0 18px #6000c0;
 }
 .futuristic-text{
-font-size:.95rem;
-line-height:1.4;
-white-space:pre-line
+  font-size:.95rem;
+  line-height:1.4;
+  white-space:pre-line;
 }
 .telegram-warning{
-color:#ff3b3b;
-font-weight:bold
+  color:#ff3b3b;
+  font-weight:bold;
 }
 #container{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:14px
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:14px;
 }
 button{
-background:transparent;
-border:1.5px solid #a26cff;
-color:#a26cff;
-padding:8px 20px;
-border-radius:6px;
-cursor:pointer;
-transition:.3s
+  background:transparent;
+  border:1.5px solid #a26cff;
+  color:#a26cff;
+  padding:9px 22px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:.3s;
+  min-width:100px;
 }
 button:hover{
-background:#a26cff;
-color:#000;
-box-shadow:0 0 10px #a26cff
+  background:#a26cff;
+  color:#000;
+  box-shadow:0 0 10px #a26cff;
 }
 </style>
 </head>
@@ -77,95 +78,127 @@ box-shadow:0 0 10px #a26cff
 <canvas class="matrix"></canvas>
 
 <div id="content">
-<h1>IVANICH SHOP</h1>
+  <h1>IVANICH SHOP</h1>
 
-<p class="futuristic-text">
+  <p class="futuristic-text">
 НАШ КЛИЕНТ — НЕ БОГ, НО ОЧЕНЬ БЛИЗКО  
 СЕРВИС НА ГРАНИ ФАНТАСТИКИ  
-</p>
+ЭТО НЕ МАГАЗИН — ЭТО ДОСТУП
+  </p>
 
-<p class="telegram-warning">МУР · КРИСТАЛЛ · ГАШ · АМФ · ШИШКИ</p>
+  <p class="telegram-warning">МУР · КРИСТАЛЛ · ГАШ · АМФ · ШИШКИ</p>
 
-<div id="container"></div>
+  <div id="container"></div>
 </div>
 
 <script>
-// MATRIX
-const canvas=document.querySelector('.matrix');
-const ctx=canvas.getContext('2d');
+// ================= MATRIX =================
+const canvas = document.querySelector('.matrix');
+const ctx = canvas.getContext('2d');
 let w,h,cols,drops=[];
 const word="IVANICH";
 
 function resize(){
-w=innerWidth;h=innerHeight;
-canvas.width=w;canvas.height=h;
-cols=Math.floor(w/14);
-drops=Array(cols).fill(0)
+  w=innerWidth; h=innerHeight;
+  canvas.width=w; canvas.height=h;
+  cols=Math.floor(w/14);
+  drops=Array(cols).fill(0);
 }
 function draw(){
-ctx.fillStyle="rgba(0,0,20,.15)";
-ctx.fillRect(0,0,w,h);
-ctx.fillStyle="#a26cff";
-ctx.font="14px monospace";
-for(let i=0;i<drops.length;i++){
-const ch=word[Math.floor(Math.random()*word.length)];
-ctx.fillText(ch,i*14,drops[i]*14);
-if(drops[i]*14>h&&Math.random()>.97)drops[i]=0;
-drops[i]++
-}}
+  ctx.fillStyle="rgba(0,0,20,0.15)";
+  ctx.fillRect(0,0,w,h);
+  ctx.fillStyle="#a26cff";
+  ctx.font="14px monospace";
+  for(let i=0;i<drops.length;i++){
+    const ch=word[Math.floor(Math.random()*word.length)];
+    ctx.fillText(ch,i*14,drops[i]*14);
+    if(drops[i]*14>h && Math.random()>0.97) drops[i]=0;
+    drops[i]++;
+  }
+}
 addEventListener('resize',resize);
-resize();setInterval(draw,50);
+resize(); setInterval(draw,50);
 
-// 🔗 РЕАЛЬНЫЕ ССЫЛКИ (ИСПРАВЛЕНЫ)
-const realLinks={
-"ОПЕРАТОР":"https://t.me/m/WqI3Xni0YjNi",
-"БОТ":"https://t.me/dasfjhlsdasdasd_bot",
-"ОТЗЫВЫ":"https://t.me/+r_IDPdbyYUbN0wYTk0",
-"ВИП ЧАТ":"https://t.me/+lPlh3th-aWxjYzk0",
-"НОВОСТИ":"https://t.me/+PPvXyMe87FxlM2I0",
-"ЧАТ":"https://t.me/+q5G7ZOOG1vI0NmQ0"
+// ================= TELEGRAM DEEP LINKS (НЕ ВИДНЫ) =================
+const tgLinks = {
+  "ОПЕРАТОР": "tg://join?invite=WqI3Xni0YjNi",
+  "БОТ": "tg://resolve?domain=dasfjhlsdasdasd_bot",
+  "ОТЗЫВЫ": "tg://join?invite=r_IDPdbyYUbN0wYTk0",
+  "ВИП ЧАТ": "tg://join?invite=lPlh3th-aWxjYzk0",
+  "НОВОСТИ": "tg://join?invite=PPvXyMe87FxlM2I0",
+  "ЧАТ": "tg://join?invite=q5G7ZOOG1vI0NmQ0"
 };
 
-// BLOB OPEN
-function openViaBlob(url){
-const html=`
+// ================= TG OPEN ENGINE =================
+function openTelegram(deep){
+  // iframe — основной способ
+  const iframe=document.createElement("iframe");
+  iframe.style.display="none";
+  iframe.src=deep;
+  document.body.appendChild(iframe);
+
+  // fallback — blob
+  setTimeout(()=>{
+    iframe.remove();
+    const html=`
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8">
+<html>
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Redirect</title></head>
-<body style="background:#000;color:#b289ff;
-display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh">
-<p>Переход в Telegram…</p>
-<button onclick="location.href='${url}'"
-style="padding:10px 20px;border:2px solid #b289ff;background:transparent;color:#b289ff">
-Открыть
-</button>
+<title>Telegram</title>
+<style>
+body{
+  margin:0;
+  background:#000;
+  color:#b289ff;
+  font-family:monospace;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  flex-direction:column;
+}
+button{
+  padding:12px 24px;
+  border:2px solid #b289ff;
+  background:transparent;
+  color:#b289ff;
+  font-size:16px;
+}
+</style>
+</head>
+<body>
+<p>Открываем Telegram…</p>
+<button onclick="location.href='${deep}'">Открыть</button>
 <script>
-setTimeout(()=>location.href='${url}',1500);
+setTimeout(()=>location.href='${deep}',1200);
 <\/script>
-</body></html>`;
-const blob=new Blob([html],{type:"text/html"});
-window.open(URL.createObjectURL(blob),'_blank','noopener');
+</body>
+</html>`;
+    const blob=new Blob([html],{type:"text/html"});
+    window.open(URL.createObjectURL(blob),"_blank","noopener");
+  },700);
 }
 
-// BUTTONS
-const c=document.getElementById('container');
-Object.entries(realLinks).forEach(([t,u])=>{
-const b=document.createElement('button');
-b.textContent=t;
-b.onclick=()=>openViaBlob(u);
-c.appendChild(b);
+// ================= BUTTONS =================
+const container=document.getElementById("container");
+Object.entries(tgLinks).forEach(([title,link])=>{
+  const btn=document.createElement("button");
+  btn.textContent=title;
+  btn.onclick=()=>openTelegram(link);
+  container.appendChild(btn);
 });
 
-// BASIC PROTECTION
-document.addEventListener('keydown',e=>{
-if(
-e.key==="F12" ||
-(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="i") ||
-(e.ctrlKey&&e.key.toLowerCase()==="u")
-){
-e.preventDefault();
-}
+// ================= BASIC PROTECTION =================
+document.addEventListener("keydown",e=>{
+  if(
+    e.key==="F12" ||
+    (e.ctrlKey && e.shiftKey && e.key.toLowerCase()==="i") ||
+    (e.ctrlKey && e.key.toLowerCase()==="u")
+  ){
+    e.preventDefault();
+  }
 });
 document.oncontextmenu=e=>e.preventDefault();
 </script>
