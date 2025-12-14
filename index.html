@@ -16,14 +16,9 @@ html,body{
   user-select:none;
 }
 
-/* ===== ФОН ===== */
+/* ===== ФОН (ЦЕЛИКОМ) ===== */
 body{
-  background-color:#050006;
-  background-image:url("skull-bg.png");
-  background-position:center center;
-  background-repeat:no-repeat;
-  background-size:contain;
-  color:#ffd86b;
+  background:#050006 url("skull-bg.png") center center / contain no-repeat fixed;
 }
 
 /* затемнение */
@@ -48,36 +43,34 @@ body::before{
   text-align:center;
 }
 
-/* ===== ЗОЛОТОЙ НЕОН ===== */
-h1, p, button{
-  color:#ffd86b;
+/* ===== ЧЁРНЫЙ ТЕКСТ + ЗОЛОТОЙ НЕОН ===== */
+h1, .futuristic-text{
+  color:#000;
   text-shadow:
-    0 0 3px #ffdd77,
-    0 0 8px #ffb700,
-    0 0 18px #cc8f00;
+    0 0 3px #ffd86b,
+    0 0 10px #ffb700,
+    0 0 22px #cc8f00;
 }
 
-h1{
-  font-size:1.9rem;
-}
+h1{ font-size:1.9rem; }
 
-/* основной текст */
 .futuristic-text{
   font-size:1rem;
   line-height:1.5;
   white-space:pre-line;
 }
 
-/* ===== НОВАЯ ФРАЗА (КРУПНО И ЖИРНО) ===== */
+/* ===== КРАСНЫЙ НЕОН ПРЕДУПРЕЖДЕНИЕ ===== */
 .telegram-warning{
-  font-size:1.25rem;       /* БОЛЬШЕ */
-  font-weight:900;         /* ЖИРНЕЕ */
+  font-size:1.35rem;
+  font-weight:900;
   letter-spacing:1px;
   text-transform:uppercase;
+  color:#000;
   text-shadow:
-    0 0 4px #ffe08a,
-    0 0 10px #ffb700,
-    0 0 24px #cc8f00;
+    0 0 4px #ff4b4b,
+    0 0 10px #ff0000,
+    0 0 26px #b00000;
 }
 
 /* ===== КНОПКИ ===== */
@@ -91,15 +84,19 @@ h1{
 button{
   background:rgba(0,0,0,0.55);
   border:2px solid #ffcc55;
+  color:#000;
   padding:11px 28px;
   border-radius:6px;
   cursor:pointer;
   transition:.25s;
   min-width:140px;
-  font-weight:700;
+  font-weight:800;
+  text-shadow:
+    0 0 3px #ffd86b,
+    0 0 10px #ffb700;
   box-shadow:
     0 0 6px #ffcc55,
-    0 0 16px #cc8f00;
+    0 0 18px #cc8f00;
 }
 
 button:hover{
@@ -124,7 +121,6 @@ button:hover{
 ЭТО НЕ МАГАЗИН — ЭТО ДОСТУП
   </p>
 
-  <!-- ОБНОВЛЁННАЯ ФРАЗА -->
   <p class="telegram-warning">
 ПЕРЕХОД НА ТЕЛЕГРАММ ТОЛЬКО ЧЕРЕЗ БРАУЗЕР
   </p>
@@ -133,67 +129,70 @@ button:hover{
 </div>
 
 <script>
-// ================= ССЫЛКИ =================
+// ===== ССЫЛКИ (TG + WEB FALLBACK) =====
 const LINKS = {
-  OPERATOR_WEB: "https://t.me/m/WaE8Y4yVZmI8",
-  OPERATOR_TG:  "tg://open?url=https://t.me/m/WaE8Y4yVZmI8",
-
-  "ЧАТ":     "tg://join?invite=q5G7ZOOG1vI0NmQ0",
-  "ВИП ЧАТ": "tg://join?invite=lPlh3th-aWxjYzk0",
-  "НОВОСТИ": "tg://join?invite=PPvXyMe87FxlM2I0",
-  "ОТЗЫВЫ":  "tg://join?invite=IDPdbyYUbN0wYTk0",
-  "АУКЦИОН": "tg://join?invite=P2N70uFsT99mMzYx"
+  "ОПЕРАТОР": {
+    tg:  "tg://open?url=https://t.me/m/WaE8Y4yVZmI8",
+    web: "https://t.me/m/WaE8Y4yVZmI8"
+  },
+  "ЧАТ": {
+    tg:  "tg://join?invite=q5G7ZOOG1vI0NmQ0",
+    web: "https://t.me/+q5G7ZOOG1vI0NmQ0"
+  },
+  "ВИП ЧАТ": {
+    tg:  "tg://join?invite=lPlh3th-aWxjYzk0",
+    web: "https://t.me/+lPlh3th-aWxjYzk0"
+  },
+  "НОВОСТИ": {
+    tg:  "tg://join?invite=PPvXyMe87FxlM2I0",
+    web: "https://t.me/+PPvXyMe87FxlM2I0"
+  },
+  "ОТЗЫВЫ": {
+    tg:  "tg://join?invite=IDPdbyYUbN0wYTk0",
+    web: "https://t.me/+IDPdbyYUbN0wYTk0"
+  },
+  "АУКЦИОН": {
+    tg:  "tg://join?invite=P2N70uFsT99mMzYx",
+    web: "https://t.me/+P2N70uFsT99mMzYx"
+  }
 };
 
-// ================= 100% ОПЕРАТОР =================
-function openOperator(){
+// ===== 100% ОТКРЫТИЕ =====
+function openLink(obj){
+  // попытка Telegram App
   const iframe=document.createElement("iframe");
   iframe.style.display="none";
-  iframe.src=LINKS.OPERATOR_TG;
+  iframe.src=obj.tg;
   document.body.appendChild(iframe);
 
+  // гарантированный fallback
   setTimeout(()=>{
     try{iframe.remove()}catch(e){}
-    window.location.href = LINKS.OPERATOR_WEB;
+    window.open(obj.web, "_blank", "noopener");
   }, 450);
 }
 
-// ================= TG ОТКРЫТИЕ =================
-function openTelegram(target){
-  const iframe=document.createElement("iframe");
-  iframe.style.display="none";
-  iframe.src=target;
-  document.body.appendChild(iframe);
-  setTimeout(()=>{ try{iframe.remove()}catch(e){} },400);
-}
-
-// ================= КНОПКИ =================
+// ===== КНОПКИ =====
 const container=document.getElementById("container");
-
-// оператор
-const opBtn=document.createElement("button");
-opBtn.textContent="ОПЕРАТОР";
-opBtn.onclick=openOperator;
-container.appendChild(opBtn);
-
-// остальные
-Object.entries(LINKS).forEach(([k,v])=>{
-  if(k==="OPERATOR_WEB"||k==="OPERATOR_TG") return;
+Object.entries(LINKS).forEach(([title, obj])=>{
   const b=document.createElement("button");
-  b.textContent=k;
-  b.onclick=()=>openTelegram(v);
+  b.textContent=title;
+  b.onclick=()=>openLink(obj);
   container.appendChild(b);
 });
 
-// ================= ЗАЩИТА =================
+// ===== ЖЁСТКАЯ ЗАЩИТА =====
 document.addEventListener("keydown",e=>{
   if(
     e.key==="F12" ||
-    (e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="i") ||
-    (e.ctrlKey&&e.key.toLowerCase()==="u")
-  ){e.preventDefault()}
+    (e.ctrlKey && e.shiftKey && e.key.toLowerCase()==="i") ||
+    (e.ctrlKey && e.key.toLowerCase()==="u") ||
+    (e.ctrlKey && e.key.toLowerCase()==="c")
+  ){ e.preventDefault(); }
 });
-document.oncontextmenu=e=>e.preventDefault();
+document.addEventListener("copy",e=>e.preventDefault());
+document.addEventListener("cut",e=>e.preventDefault());
+document.addEventListener("contextmenu",e=>e.preventDefault());
 </script>
 
 </body>
