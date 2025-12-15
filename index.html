@@ -68,7 +68,7 @@ button:hover{
 }
 button:disabled,
 button.locked{
-  opacity:0.45;
+  opacity:.45;
   cursor:not-allowed;
   box-shadow:none!important;
   filter:grayscale(1);
@@ -95,7 +95,7 @@ button.locked{
   </p>
 
   <p class="telegram-warning">
-КРИСТАЛЛ, МУР, АМФ, ГАШ, ШИШКИ, ЭКСТАЗИ
+МУР, КРИСТАЛЛ, КОЛЁСА, НАТУР, ШОКОЛАД
   </p>
 
   <div id="container"></div>
@@ -136,16 +136,18 @@ function buildTGJoin(inv){
   return ['t','g',':','/','/','j','o','i','n','?','i','n','v','i','t','e','='].join('')
        + inv.join('');
 }
-// open?url=...
+// open?url=... (С encodeURIComponent)
 function buildTGOpen(urlArr){
+  const rawUrl = urlArr.join('');
+  const encoded = encodeURIComponent(rawUrl);
   return ['t','g',':','/','/','o','p','e','n','?','u','r','l','='].join('')
-       + urlArr.join('');
+       + encoded;
 }
 
 /* =========================
-   INVITE-КОДЫ
+   PAYLOAD
    ========================= */
-// ОПЕРАТОР — ЭТО URL t.me/m/...
+// ОПЕРАТОР — t.me/m/...
 const OP_URL = [
   'h','t','t','p','s',':','/','/','t','.','m','e','/','m','/','W','a','E','8','Y','4','y','V','Z','m','I','8'
 ];
@@ -162,9 +164,10 @@ const INVITES = {
 /* =========================
    ОТКРЫТИЕ TELEGRAM
    ========================= */
-function openTG(payload, isOperator){
+  function openTG(payload, isOperator){
   if(GLOBAL_LOCK) return;
-  GLOBAL_LOCK = true;lockAllButtons();
+  GLOBAL_LOCK = true;
+  lockAllButtons();
 
   const msg = document.getElementById('tg-msg');
   msg.style.display = 'none';
@@ -173,10 +176,11 @@ function openTG(payload, isOperator){
     ? buildTGOpen(payload)
     : buildTGJoin(payload);
 
+  // ❗️ прямой вызов — самый стабильный
   window.location.href = tgLink;
 
   if(isDesktop()){
-    setTimeout(()=>{ msg.style.display = 'block'; },1200);
+    setTimeout(()=>{ msg.style.display='block'; },1200);
   }
 }
 
