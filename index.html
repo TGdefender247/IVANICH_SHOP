@@ -8,49 +8,38 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;font-family:'Share Tech Mono', monospace;user-select:none}
+body{background:#050006 url("skull-bg.png") center/contain no-repeat fixed}
+body::before{content:"";position:fixed;inset:0;background:rgba(5,0,6,.65);z-index:-1}
 
-/* ФОН */
-body{
-  background:#050006 url("skull-bg.png") center center / contain no-repeat fixed;
-}
-body::before{
-  content:"";position:fixed;inset:0;background:rgba(5,0,6,0.65);z-index:-1;
-}
-
-/* КОНТЕНТ */
-#content{
-  max-width:720px;margin:auto;padding:40px 16px;min-height:100vh;
-  display:flex;flex-direction:column;justify-content:center;gap:26px;text-align:center;
-}
-
-/* ТЕКСТ: чёрный + золотой неон */
-h1,.futuristic-text{
-  color:#000;
-  text-shadow:0 0 3px #ffd86b,0 0 10px #ffb700,0 0 22px #cc8f00;
-}
+#content{max-width:720px;margin:auto;padding:40px 16px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:26px;text-align:center}
+h1,.futuristic-text{color:#000;text-shadow:0 0 3px #ffd86b,0 0 10px #ffb700,0 0 22px #cc8f00}
 h1{font-size:1.9rem}
 .futuristic-text{font-size:1rem;line-height:1.5;white-space:pre-line}
 
-/* ПРЕДУПРЕЖДЕНИЕ: красный неон */
 .telegram-warning{
   font-size:1.35rem;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#000;
-  text-shadow:0 0 4px #ff4b4b,0 0 10px #ff0000,0 0 26px #b00000;
+  text-shadow:0 0 4px #ff4b4b,0 0 10px #ff0000,0 0 26px #b00000
 }
 
-/* КНОПКИ */
 #container{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
 button{
-  background:rgba(0,0,0,0.6);border:2px solid #ffcc55;color:#000;
-  padding:12px 30px;border-radius:6px;cursor:pointer;font-weight:800;
+  background:rgba(0,0,0,.55);border:2px solid #ffcc55;color:#000;
+  padding:11px 28px;border-radius:6px;cursor:pointer;min-width:140px;font-weight:800;
   text-shadow:0 0 3px #ffd86b,0 0 10px #ffb700;
-  box-shadow:0 0 6px #ffcc55,0 0 18px #cc8f00;transition:.25s;
+  box-shadow:0 0 6px #ffcc55,0 0 18px #cc8f00;transition:.25s
 }
-button:hover{background:#ffcc55;box-shadow:0 0 16px #ffcc55,0 0 36px #ffb700}
+button:hover{background:#ffcc55;text-shadow:none;box-shadow:0 0 14px #ffcc55,0 0 34px #ffb700}
+
+/* Сообщение детекта */
+#tg-msg{
+  display:none;margin-top:10px;font-weight:900;
+  color:#000;
+  text-shadow:0 0 4px #ff4b4b,0 0 10px #ff0000,0 0 26px #b00000
+}
 </style>
 </head>
 
 <body>
-
 <div id="content">
   <h1>IVANICH SHOP</h1>
 
@@ -60,77 +49,112 @@ button:hover{background:#ffcc55;box-shadow:0 0 16px #ffcc55,0 0 36px #ffb700}
 ЭТО НЕ МАГАЗИН — ЭТО ДОСТУП
   </p>
 
-  <p class="telegram-warning">
-ПЕРЕХОД В TELEGRAM ТОЛЬКО ЧЕРЕЗ ПРИЛОЖЕНИЕ
-  </p>
+  <p class="telegram-warning">ПЕРЕХОД В TELEGRAM ТОЛЬКО ЧЕРЕЗ ПРИЛОЖЕНИЕ</p>
 
   <div id="container"></div>
+
+  <div id="tg-msg">
+    ❌ Telegram Desktop не установлен<br><br>
+    ⚠️ Для доступа необходимо установить Telegram Desktop<br>
+    Переход через браузер запрещён
+  </div>
 </div>
 
 <script>
-// ===== ТОЛЬКО TG:// (БЕЗ WEB) =====
-const LINKS = {
-  "ОПЕРАТОР": "tg://open?url=https://t.me/m/WaE8Y4yVZmI8",
-  "ЧАТ":     "tg://join?invite=q5G7ZOOG1vI0NmQ0",
-  "ВИП ЧАТ": "tg://join?invite=lPlh3th-aWxjYzk0",
-  "НОВОСТИ": "tg://join?invite=PPvXyMe87FxlM2I0",
-  "ОТЗЫВЫ":  "tg://join?invite=IDPdbyYUbN0wYTk0",
-  "АУКЦИОН": "tg://join?invite=P2N70uFsT99mMzYx"
-};
-
-// ===== BLOB → ТОЛЬКО TELEGRAM (БЕЗ БРАУЗЕРА) =====
-function openViaBlobTG(tgLink){
-  const html = `
-<!DOCTYPE html><html><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Telegram only</title></head>
-<body style="margin:0;background:#000;color:#ffcc55;
-display:flex;align-items:center;justify-content:center;height:100vh;
-font-family:monospace;flex-direction:column">
-<p>Открываем Telegram…</p>
-<script>
+/* ================= АНТИ-DEVTOOLS И АНТИ-КОПИРОВАНИЕ ================= */
 (function(){
-  // 🔒 запрет повторного автозапуска
-  if(sessionStorage.getItem("tg_once")){
-    document.body.insertAdjacentHTML("beforeend","<p>Повторный переход заблокирован</p>");
-    return;
-  }
-  sessionStorage.setItem("tg_once","1");
-
-  // ✅ ТОЛЬКО tg://
-  var iframe=document.createElement("iframe");
-  iframe.style.display="none";
-  iframe.src="${tgLink}";
-  document.body.appendChild(iframe);
+  const kill=()=>{document.body.innerHTML='';throw 0};
+  ['contextmenu','copy','cut','dragstart','selectstart'].forEach(e=>addEventListener(e,x=>{x.preventDefault();kill()}));
+  addEventListener('keydown',e=>{
+    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&'ij'.includes(e.key.toLowerCase()))||(e.ctrlKey&&'ucs'.includes(e.key.toLowerCase()))){
+      e.preventDefault();kill();
+    }
+  });
+  setInterval(()=>{ if(Math.abs(outerWidth-innerWidth)>160||Math.abs(outerHeight-innerHeight)>160) kill(); },700);
+  setInterval(()=>{ try{debugger}catch(e){} },900);
 })();
-<\/script>
-</body></html>`;
-  const blob=new Blob([html],{type:"text/html"});
-  window.open(URL.createObjectURL(blob),"_blank","noopener");
+
+/* ================= ПРОВЕРКА: ТОЛЬКО ПК ================= */
+function isDesktop(){
+  const ua=navigator.userAgent.toLowerCase();
+  return /(windows|mac os|linux)/.test(ua) && !/(android|iphone|ipad)/.test(ua);
 }
 
-// ===== КНОПКИ =====
-const container=document.getElementById("container");
-Object.entries(LINKS).forEach(([title,tg])=>{
-  const b=document.createElement("button");
-  b.textContent=title;
-  b.onclick=()=>openViaBlobTG(tg);
-  container.appendChild(b);
-});
+/* ================= ОДНОРАЗОВЫЙ КЛИК ================= */
+function once(){
+  if(sessionStorage.getItem('_once')) return false;
+  sessionStorage.setItem('_once','1'); return true;
+}
 
-// ===== ЗАЩИТА =====
-document.addEventListener("keydown",e=>{
-  if(
-    e.key==="F12" ||
-    (e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="i") ||
-    (e.ctrlKey&&e.key.toLowerCase()==="u") ||
-    (e.ctrlKey&&e.key.toLowerCase()==="c")
-  ){e.preventDefault()}
+/* ================= ДИНАМИЧЕСКАЯ СБОРКА tg:// ================= */
+const PFX=['t','g',':','/','/','j','o','i','n','?','i','n','v','i','t','e','='];
+const mk=(p)=>PFX.join('')+p.join('');
+const INV={
+  OP:['W','a','E','8','Y','4','y','V','Z','m','I','8'],
+  CH:['q','5','G','7','Z','O','O','G','1','v','I','0','N','m','Q','0'],
+  VI:['l','P','l','h','3','t','h','-','a','W','x','j','Y','z','k','0'],
+  NO:['P','P','v','X','y','M','e','8','7','F','x','l','M','2','I','0'],
+  OT:['I','D','P','d','b','y','Y','U','b','N','0','w','Y','T','k','0'],
+  AU:['P','2','N','7','0','u','F','s','T','9','9','m','M','z','Y','x']
+};
+
+/* ================= BLOB → ТОЛЬКО TG + ДЕТЕКТ ================= */
+function openTG(code){
+  const msg=document.getElementById('tg-msg');
+  msg.style.display='none';
+
+  if(!isDesktop()){
+    msg.style.display='block';
+    return;
+  }
+  if(!once()) return;
+
+  const tgLink=mk(code);
+  const html=`<!doctype html><meta charset=utf-8>
+  <script>
+(function(){
+  var done=false;
+  var f=document.createElement('iframe');
+  f.style.display='none';
+  f.src="${tgLink}";
+  document.body.appendChild(f);
+
+  // Если TG перехватил — страница потеряет фокус
+  window.addEventListener('blur',function(){ done=true; });
+
+  // Если не перехватил — сообщим родителю
+  setTimeout(function(){
+    if(!done){
+      try{ parent.postMessage('TG_NOT_OPENED','*'); }catch(e){}
+    }
+  },800);
+})();
+<\/script>`;
+  const b=new Blob([html],{type:'text/html'});
+  const w=open(URL.createObjectURL(b),'_blank','noopener');
+
+  // Слушаем сообщение от blob
+  const onMsg=(e)=>{
+    if(e.data==='TG_NOT_OPENED'){
+      msg.style.display='block';
+      removeEventListener('message',onMsg);
+      try{ w&&w.close(); }catch(e){}
+    }
+  };
+  addEventListener('message',onMsg);
+}
+
+/* ================= КНОПКИ ================= */
+const C=document.getElementById('container');
+[
+  ['ОПЕРАТОР',INV.OP],['ЧАТ',INV.CH],['ВИП ЧАТ',INV.VI],
+  ['НОВОСТИ',INV.NO],['ОТЗЫВЫ',INV.OT],['АУКЦИОН',INV.AU]
+].forEach(x=>{
+  const b=document.createElement('button');
+  b.textContent=x[0];
+  b.onclick=()=>openTG(x[1]);
+  C.appendChild(b);
 });
-document.addEventListener("copy",e=>e.preventDefault());
-document.addEventListener("cut",e=>e.preventDefault());
-document.addEventListener("contextmenu",e=>e.preventDefault());
 </script>
-
 </body>
 </html>
